@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Excel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="loader" id="loader" style="display:flex;justify-content:center;align-items:center; flex-direction:column">
+    <div class="spinner"></div><br/>
+    <div id="timing" class="timing"></div>
+</div>
+
+
+<div id="message" class="alert alert-danger" style="display:none;"></div>
+
+@using (Html.BeginForm("UploadExcel", "Excel", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form", id = "uploadForm" }))
+{
+    <div class="form-group">
+        <label for="excelFile">Select an Excel file:</label>
+        <input type="file" name="excelFile" id="excelFile" accept=".xlsx, .xls" class="form-control-file" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+}
+
+
+<script src="~/Scripts/Loader.js"></script>
+<script>
+ 
+
+    // Display error message
+    var errorMessage = '@ViewBag.Message';
+    if (errorMessage && errorMessage !== "File uploaded and data saved to SQL table successfully.") {
+        var messageElement = document.getElementById("message");
+
+        // Extract the relevant error information from the error message
+        var startIndex = errorMessage.indexOf("Error: ") + "Error: ".length;
+        var endIndex = errorMessage.indexOf(". Supported extensions");
+        var formattedErrorMessage = errorMessage.substring(startIndex, endIndex);
+
+        messageElement.innerHTML = '<div class="alert alert-danger">' + formattedErrorMessage + '</div>';
+        messageElement.style.display = "block";
+    }
+</script>
